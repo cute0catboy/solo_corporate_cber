@@ -35,7 +35,17 @@ def human_type(text):
     # 3. Основной цикл печати с контролем индекса (idx)
     for idx, ch in enumerate(text):
         # Базовая задержка между буквами (200-178 cpm)
-        time.sleep(random.uniform(0.20, 0.33))
+        n = random.randint(1, 3)
+        n2 = random.randint(1, 25)
+
+        if n == 1:
+            time.sleep(random.uniform(0.02, 0.40))
+        elif n2 == 20:
+            time.sleep(1.65)
+        elif n == 2:
+            time.sleep(random.uniform(0.005, 0.15))
+        else:
+            time.sleep(random.uniform(0.35 , 0.50))
 
         # Если текущий индекс выбран для генерации ошибки
         # if idx in typo_indices:
@@ -66,11 +76,11 @@ def speed_test(): # спид тест
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False, slow_mo=300)
         page = browser.new_page()
-        page.goto("https://solocorporate.com")
+        page.goto("https://sberbank.solocorporate.com")
 
         page.get_by_placeholder("E-mail").first.fill(LOGIN)
-        page.get_by_placeholder("Пароль").first.fill(PASSWORD)
-        page.get_by_role("button", name="Войти").click()
+        page.get_by_placeholder(password_phrase).first.fill(PASSWORD)
+        page.get_by_role("button", name=log_in_phrase).click()
         page.wait_for_timeout(3000)
 
         page.locator('a[href="/study"]').click()
@@ -96,11 +106,11 @@ def learning_course(): # прохождение обучения
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False, slow_mo=300)
         page = browser.new_page()
-        page.goto("https://sberbank.solocorporate.com/co/sberbankж прода")
+        page.goto("https://sberbank.solocorporate.com")
 
         page.get_by_placeholder("E-mail").first.fill(LOGIN)
-        page.get_by_placeholder("Пароль").first.fill(PASSWORD)
-        page.get_by_role("button", name="Войти").click()
+        page.get_by_placeholder(password_phrase).first.fill(PASSWORD)
+        page.get_by_role("button", name=log_in_phrase).click()
         page.wait_for_timeout(3000)
 
         page.locator('a[href="/study"]').click()
@@ -157,4 +167,10 @@ def learning_course(): # прохождение обучения
                 time.sleep(3) # Перезапуск цикла через 3 секунды, если что-то пошло не так
 
 if __name__ == "__main__":
+    if config.lang == "rus":
+        password_phrase = "Пароль"
+        log_in_phrase = "Войти"
+    elif config.lang == "eng":
+        password_phrase = "Password"
+        log_in_phrase = "Sign in"
     learning_course()
